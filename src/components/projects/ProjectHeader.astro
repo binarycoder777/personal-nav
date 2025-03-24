@@ -1,0 +1,36 @@
+---
+import { Icon } from "astro-icon/components";
+
+const categories = [
+  { name: '全部', icon: 'lucide:layout-grid' },
+  { name: '前端', icon: 'lucide:monitor' },
+  { name: '后端', icon: 'lucide:server' },
+  { name: '移动端', icon: 'lucide:smartphone' },
+  { name: '人工智能', icon: 'lucide:brain' },
+  { name: '工具库', icon: 'lucide:wrench' },
+];
+---
+
+<div class="bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl p-6 my-4">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">开源项目精选</h1>
+    <div class="relative">
+      <input
+        type="text"
+        placeholder="搜索项目..."
+        class="pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+      />
+      <Icon name="lucide:search" class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
+    </div>
+  </div>
+  <div class="flex items-center space-x-4 overflow-x-auto pb-2">
+    {categories.map(category => (
+      <button class="px-4 py-2 rounded-lg bg-white/50 hover:bg-white transition-all duration-300 
+                     flex items-center space-x-2 text-gray-700 hover:text-purple-600
+                     whitespace-nowrap">
+        <Icon name={category.icon} class="w-4 h-4" />
+        <span>{category.name}</span>
+      </button>
+    ))}
+  </div>
+</div> 

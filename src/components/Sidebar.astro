@@ -1,0 +1,92 @@
+---
+import { Icon } from "astro-icon/components";
+
+const currentPath = Astro.url.pathname;
+
+const menuItems = [
+  { name: '首页', icon: 'lucide:home', href: '/' },
+  { name: '更多', icon: 'lucide:more-horizontal', href: '/more' },
+  // { name: '开源项目', icon: 'lucide:folder', href: '/projects' },
+  // { name: '资源分享', icon: 'lucide:star', href: '/resources' },
+  // { name: '应用软件', icon: 'lucide:grid', href: '/apps' },
+  // { name: '每周投稿', icon: 'lucide:file-text', href: '/weekly' },
+  // { name: '前沿AI', icon: 'lucide:brain', href: '/ai' }
+];
+---
+
+<div id="sidebar" class="fixed left-0 top-0 h-full w-20 bg-white shadow-lg transition-transform duration-300 z-20">
+  <div class="flex flex-col items-center pt-20 pb-4 space-y-4">
+    {menuItems.map(item => {
+      const isActive = currentPath === item.href || 
+                      (item.href !== '/' && currentPath.startsWith(item.href));
+      return (
+        <a 
+          href={item.href} 
+          class={`flex flex-col items-center p-2 rounded-xl w-16 group
+                  transition-all duration-300 hover:bg-purple-50
+                  ${isActive ? 'text-purple-600 bg-purple-50' : 'text-gray-600'}`}
+        >
+          <div class="relative">
+            <Icon 
+              name={item.icon} 
+              class={`w-6 h-6 transition-colors duration-300 
+                     ${isActive ? 'text-purple-600' : 'group-hover:text-purple-600'}`}
+            />
+            <div class={`absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 
+                        bg-gradient-to-r from-purple-500 to-blue-500
+                        transition-all duration-300
+                        ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}>
+            </div>
+          </div>
+          <span class={`mt-1.5 text-xs font-medium transition-opacity duration-300
+                      ${isActive ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
+            {item.name}
+          </span>
+        </a>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  import sidebarState from '../store/sidebarState';
+
+  const sidebar = document.getElementById('sidebar');
+  
+  if (sidebar) {
+    // 设置初始状态
+    const initialState = localStorage.getItem('sidebarState') === 'closed' ? false : true;
+    updateSidebarPosition(initialState);
+
+    sidebarState.subscribe((isOpen) => {
+      updateSidebarPosition(isOpen);
+    });
+  }
+
+  function updateSidebarPosition(isOpen) {
+    if (sidebar) {
+      sidebar.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
+    }
+  }
+</script>
+
+<style>
+  /* 确保图标容器有固定高度 */
+  .icon-container {
+    height: 24px;
+  }
+
+  /* 添加滚动条样式 */
+  div::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  /* 悬停效果的下划线动画 */
+  a:hover .decoration {
+    width: 100%;
+  }
+
+  #sidebar {
+    z-index: 50;
+  }
+</style> 

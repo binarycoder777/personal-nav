@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import TopBar from '../components/TopBar.astro';
+import ResourceHeader from '../components/resources/ResourceHeader.astro';
+import ResourceGrid from '../components/resources/ResourceGrid.astro';
+import PopularResources from '../components/resources/PopularResources.astro';
+---
+
+<Layout title="资源分享">
+  <div class="min-h-screen bg-gray-50">
+    <Sidebar />
+    <div class="ml-[10px] px-8">
+        <TopBar />
+      <ResourceHeader />
+      <ResourceGrid />
+      <PopularResources />
+    </div>
+  </div>
+</Layout> 

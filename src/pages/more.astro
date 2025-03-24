@@ -1,0 +1,114 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import TopBar from '../components/TopBar.astro';
+import { Icon } from "astro-icon/components";
+
+const upcomingFeatures = [
+  {
+    name: '开源项目',
+    icon: 'lucide:folder',
+    description: '精选优质开源项目，助力开发者发现好玩有趣的项目',
+    status: '开发中',
+    progress: 70
+  },
+  {
+    name: '资源分享',
+    icon: 'lucide:star',
+    description: '分享高质量的学习资源、设计资源和开发工具',
+    status: '规划中',
+    progress: 30
+  },
+  {
+    name: '应用软件',
+    icon: 'lucide:grid',
+    description: '推荐实用的应用软件，提高工作效率',
+    status: '即将开始',
+    progress: 10
+  },
+  {
+    name: '每周投稿',
+    icon: 'lucide:file-text',
+    description: '每周精选用户投稿，分享优质内容',
+    status: '规划中',
+    progress: 20
+  },
+  {
+    name: '前沿AI',
+    icon: 'lucide:brain',
+    description: '探索最新AI技术和应用，紧跟技术前沿',
+    status: '开发中',
+    progress: 60
+  }
+];
+---
+
+<Layout title="更多功能">
+  <div class="min-h-screen bg-gray-50">
+    <Sidebar />
+    <div class="ml-[10px] px-8">
+      <TopBar />
+      
+      <div class="max-w-4xl mx-auto py-12">
+        <div class="text-center mb-12">
+          <h1 class="text-3xl font-bold text-gray-900 mb-4">更多精彩即将到来</h1>
+          <p class="text-gray-600">我们正在努力开发更多功能，为您带来更好的体验</p>
+        </div>
+
+        <div class="grid gap-6">
+          {upcomingFeatures.map(feature => (
+            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                  <Icon name={feature.icon} class="w-6 h-6 text-purple-600" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">{feature.name}</h3>
+                    <span class="px-3 py-1 rounded-full text-sm bg-purple-50 text-purple-600">
+                      {feature.status}
+                    </span>
+                  </div>
+                  <p class="mt-1 text-gray-600">{feature.description}</p>
+                  <div class="mt-4">
+                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div 
+                        class="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"
+                        style={`width: ${feature.progress}%`}
+                      >
+                      </div>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-500 text-right">
+                      开发进度: {feature.progress}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-12 text-center">
+          <p class="mt-4 text-gray-500">
+            如果您有任何建议或想法，欢迎
+            <a href="#" class="text-purple-600 hover:underline">联系我</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* 渐变动画 */
+  .bg-gradient-to-r {
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+</style> 

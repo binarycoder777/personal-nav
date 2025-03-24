@@ -1,0 +1,341 @@
+---
+import { Icon } from "astro-icon/components";
+import { supabase } from "../script/supabase";
+
+// ToolGrid 数据
+const tools = [
+  { id: 0, name: '全部', icon: 'lucide:box', color: 'cyan' },
+  { id: 1, name: 'AI', icon: 'lucide:cpu', color: 'cyan' },
+  { id: 2, name: '开发工具', icon: 'lucide:code-2', color: 'green' },
+  { id: 3, name: '文本处理', icon: 'lucide:file-text', color: 'orange' },
+  { id: 4, name: '视频处理', icon: 'lucide:video', color: 'red' },
+  { id: 5, name: '设计', icon: 'lucide:palette', color: 'pink' },
+  { id: 6, name: '社区', icon: 'lucide:users', color: 'blue' },
+  { id: 7, name: '灵感', icon: 'lucide:lightbulb', color: 'blue' },
+];
+
+// 初始化数据
+const pageSize = 10;
+const { data: initialData, count } = await supabase
+  .from("t_nav_website")
+  .select("*", { count: 'exact' })
+  .range(0, pageSize - 1);
+
+const totalPages = Math.ceil((count || 0) / pageSize);
+---
+
+<div>
+  {/* Hero Section */}
+  <div class="bg-gradient-to-r from-cyan-400 via-purple-500 to-purple-600 rounded-xl p-12 my-4 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white"></div>
+      <div class="absolute -left-10 -bottom-10 w-32 h-32 rounded-full bg-white"></div>
+    </div>
+
+    <div class="relative z-10 max-w-3xl mx-auto">
+      <form id="search-form" class="relative group">
+        <div class="relative flex items-center">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="搜索工具、资源、站点..."
+            class="w-full px-6 py-4 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/70 
+                   focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent
+                   text-lg backdrop-blur-sm transition-all duration-300"
+          />
+          <button type="submit" class="absolute right-4 flex items-center space-x-2">
+            <Icon name="lucide:search" class="w-5 h-5 text-white/70" />
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-4 flex items-center justify-center flex-wrap gap-2 text-sm text-white/80">
+        <span class="text-white/60">热门搜索：</span>
+        {[
+          "React", "Vue", "TypeScript", "Next.js", "Astro"
+        ].map((tag) => (
+          <button
+            type="button"
+            class="search-tag px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200 backdrop-blur-sm"
+            data-tag={tag}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  {/* Tool Grid */}
+  <div class="max-w-4xl mx-auto">
+    <div class="grid grid-cols-8 gap-1.5">
+      {tools.map(tool => (
+        <button 
+          type="button"
+          class="category-btn group relative flex flex-col items-center justify-center h-28"
+          data-category={tool.name}
+        >
+          <div class={`w-12 h-12 rounded-xl flex items-center justify-center mb-2 
+                      group-hover:scale-110 transition-all duration-300
+                      ${tool.color}-category`}>
+            <Icon 
+              name={tool.icon} 
+              class={`w-6 h-6 text-${tool.color}-600`}
+            />
+          </div>
+          <span class="text-sm font-medium text-center relative">
+            {tool.name}
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 
+                         group-hover:w-full transition-all duration-300"></span>
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {/* Hot Tools */}
+  <div id="hot-tools-container">
+    <div class="my-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4" id="tools-grid">
+        {initialData?.map(tool => (
+          <a href={`/tool/${tool.id}`} class="block bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <img src={tool.image} alt={tool.tiitle} class="w-full aspect-video object-cover" />
+            <div class="p-4">
+              <h3 class="font-medium text-gray-900">{tool.title}</h3>
+              <p class="text-sm text-gray-500">{tool.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- 分页部分 -->
+      <div class="mt-8 flex justify-center" id="pagination">
+        <div class="flex space-x-2">
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              class={`px-3 py-1 rounded ${i === 0 ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              data-page={i + 1}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { searchWebsites } from '../services/searchService';
+
+  // DOM 元素
+  const toolsGrid = document.getElementById('tools-grid');
+  const pagination = document.getElementById('pagination');
+  const searchForm = document.getElementById('search-form');
+  const searchInput = document.getElementById('search-input');
+
+  // 状态变量
+  let currentPage = 1;
+  let currentCategory = '';
+  let currentTitle = '';
+  const pageSize = 10;
+
+  // 搜索和渲染函数
+  async function fetchAndRender(params = {}) {
+    try {
+      console.log('Searching with params:', params); // 调试日志
+      const results = await searchWebsites({
+        ...params,
+        page: currentPage,
+        pageSize
+      });
+      
+      if (!results.data) {
+        console.error('No data received');
+        return;
+      }
+
+      console.log('Search results:', results); // 调试日志
+      
+      renderResults(results);
+    } catch (error) {
+      console.error('Search error:', error);
+    }
+  }
+
+  function renderResults(results) {
+    if (!toolsGrid || !results.data.length) {
+      toolsGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">没有找到相关结果</p>';
+      return;
+    }
+    
+    const content = results.data.map(tool => `
+      <a href="/tool/${tool.id}" class="block bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <img src="${tool.image}" alt="${tool.tiitle}" class="w-full aspect-video object-cover" />
+        <div class="p-4">
+          <h3 class="font-medium text-gray-900">${tool.title}</h3>
+          <p class="text-sm text-gray-500">${tool.description}</p>
+        </div>
+      </a>
+    `).join('');
+
+    toolsGrid.innerHTML = content;
+    updatePagination(results.totalPages);
+  }
+
+  function updatePagination(totalPages) {
+    if (!pagination) return;
+
+    const buttons = Array.from({ length: totalPages }).map((_, i) => `
+      <button
+        class="px-3 py-1 rounded ${i + 1 === currentPage ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"
+        data-page="${i + 1}"
+      >
+        ${i + 1}
+      </button>
+    `).join('');
+
+    pagination.innerHTML = `<div class="flex space-x-2">${buttons}</div>`;
+  }
+
+  // 更新分类按钮状态
+  function updateCategoryButtons(selectedCategory) {
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      const category = btn.dataset.category;
+      const iconDiv = btn.querySelector('div');
+      const textSpan = btn.querySelector('span');
+      
+      const isSelected = (category === selectedCategory) || 
+                        (category === '全部' && selectedCategory === '');
+      
+      if (isSelected) {
+        // 选中状态
+        iconDiv.classList.add('bg-purple-100');
+        textSpan.classList.add('text-purple-600');
+        btn.classList.add('selected');
+      } else {
+        // 未选中状态
+        iconDiv.classList.remove('bg-purple-100');
+        textSpan.classList.remove('text-purple-600');
+        btn.classList.remove('selected');
+      }
+    });
+  }
+
+  // 分类按钮点击
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const newCategory = btn.dataset.category;
+      
+      if (newCategory === '全部') {
+        currentCategory = '';
+        updateCategoryButtons('全部');
+      } else if (currentCategory === newCategory) {
+        currentCategory = '';
+        updateCategoryButtons('全部');
+      } else {
+        currentCategory = newCategory;
+        updateCategoryButtons(currentCategory);
+      }
+      
+      currentPage = 1;
+      console.log('Category clicked:', currentCategory);
+      await fetchAndRender({ title: currentTitle, category: currentCategory });
+    });
+  });
+
+  // 初始化时选中"全部"
+  updateCategoryButtons('全部');
+
+  // 搜索表单提交
+  if (searchForm) {
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      currentTitle = searchInput?.value.trim() || '';
+      currentPage = 1;
+      console.log('Form submitted:', { title: currentTitle, category: currentCategory });
+      await fetchAndRender({ title: currentTitle, category: currentCategory });
+    });
+  }
+
+  // 分页点击
+  if (pagination) {
+    pagination.addEventListener('click', async (e) => {
+      if (e.target.tagName === 'BUTTON') {
+        currentPage = parseInt(e.target.dataset.page);
+        await fetchAndRender({ title: currentTitle, category: currentCategory });
+        toolsGrid?.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+  // 热门标签点击
+  document.querySelectorAll('.search-tag').forEach(tag => {
+    tag.addEventListener('click', async () => {
+      currentTitle = tag.dataset.tag;
+      if (searchInput) {
+        searchInput.value = currentTitle;
+      }
+      currentPage = 1;
+      console.log('Tag clicked:', { title: currentTitle, category: currentCategory });
+      await fetchAndRender({ title: currentTitle, category: currentCategory });
+    });
+  });
+
+  // 添加样式
+  const style = document.createElement('style');
+  style.textContent = `
+    .category-btn.selected div {
+      background-color: rgb(243 232 255);
+      transform: scale(1.1);
+    }
+    .category-btn.selected span {
+      color: rgb(147 51 234);
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+
+<style>
+  .grid {
+    grid-auto-rows: min-content;
+  }
+
+  /* 文字下划线渐变动画 */
+  span span {
+    transform-origin: left;
+    transition: width 0.3s ease;
+  }
+
+  /* 搜索框样式 */
+  input[type="text"]::placeholder {
+    transition: color 0.3s ease;
+  }
+
+  input[type="text"]:focus::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* 渐变动画效果 */
+  .bg-gradient-to-r {
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* 确保搜索框在暗色主题下也能正常工作 */
+  :global(.dark) input[type="text"] {
+    color: white;
+  }
+</style> 

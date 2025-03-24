@@ -1,0 +1,93 @@
+---
+import { Icon } from "astro-icon/components";
+
+const resources = [
+  {
+    title: 'Figma 设计系统模板',
+    description: '完整的设计系统模板，包含组件库、样式指南和最佳实践',
+    category: '设计资源',
+    icon: 'lucide:figma',
+    color: 'purple',
+    downloads: '2.3k',
+    rating: 4.8
+  },
+  {
+    title: 'VS Code 主题包',
+    description: '精心调制的 VS Code 主题集合，适合长时间编码',
+    category: '开发工具',
+    icon: 'lucide:code',
+    color: 'blue',
+    downloads: '5.1k',
+    rating: 4.9
+  },
+  {
+    title: 'React 项目最佳实践指南',
+    description: '详细的 React 项目架构设计和开发规范文档',
+    category: '学习教程',
+    icon: 'lucide:book-open',
+    color: 'green',
+    downloads: '3.7k',
+    rating: 4.7
+  },
+  {
+    title: 'UI 图标库精选',
+    description: '高质量 SVG 图标集合，包含多种风格和主题',
+    category: '素材库',
+    icon: 'lucide:palette',
+    color: 'orange',
+    downloads: '8.2k',
+    rating: 4.6
+  },
+  {
+    title: 'Chrome 开发者工具集',
+    description: '提升开发效率的 Chrome 插件合集',
+    category: '插件',
+    icon: 'lucide:puzzle',
+    color: 'cyan',
+    downloads: '4.5k',
+    rating: 4.5
+  },
+  {
+    title: 'Web 动效模板库',
+    description: '可复用的网页动画效果和交互组件',
+    category: '素材库',
+    icon: 'lucide:move',
+    color: 'pink',
+    downloads: '3.9k',
+    rating: 4.8
+  }
+];
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {resources.map(resource => (
+    <div class="bg-white rounded-xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+      <div class="flex items-start space-x-4">
+        <div class={`w-12 h-12 rounded-xl bg-${resource.color}-50 flex items-center justify-center
+                     group-hover:scale-110 transition-transform duration-300`}>
+          <Icon name={resource.icon} class={`w-6 h-6 text-${resource.color}-500`} />
+        </div>
+        <div class="flex-1">
+          <h3 class="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors duration-300">
+            {resource.title}
+          </h3>
+          <p class="text-sm text-gray-500 mt-1 line-clamp-2">{resource.description}</p>
+          
+          <div class="flex items-center justify-between mt-4">
+            <span class="text-sm text-gray-500">{resource.category}</span>
+            <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-1">
+                <Icon name="lucide:download" class="w-4 h-4 text-gray-400" />
+                <span class="text-sm text-gray-600">{resource.downloads}</span>
+              </div>
+              <div class="flex items-center space-x-1">
+                <Icon name="lucide:star" class="w-4 h-4 text-yellow-400" />
+                <span class="text-sm text-gray-600">{resource.rating}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div> 

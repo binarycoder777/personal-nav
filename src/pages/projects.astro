@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import TopBar from '../components/TopBar.astro';
+import ProjectHeader from '../components/projects/ProjectHeader.astro';
+import ProjectGrid from '../components/projects/ProjectGrid.astro';
+import TrendingProjects from '../components/projects/TrendingProjects.astro';
+---
+
+<Layout title="开源项目">
+  <div class="min-h-screen bg-gray-50">
+    <Sidebar />
+    <div class="ml-[10px] px-8">
+      <TopBar />
+      <ProjectHeader />
+      <ProjectGrid />
+      <TrendingProjects />
+    </div>
+  </div>
+</Layout> 

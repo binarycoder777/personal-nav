@@ -1,0 +1,129 @@
+---
+import { Icon } from "astro-icon/components";
+
+// 将函数移到这里
+function getLanguageColor(language: string): string {
+  const colors = {
+    'JavaScript': '#f7df1e',
+    'TypeScript': '#3178c6',
+    'CSS': '#563d7c',
+    'C++': '#f34b7d',
+  };
+  return colors[language] || '#8884';
+}
+
+const projects = [
+  {
+    name: 'Vue.js',
+    description: '渐进式 JavaScript 框架',
+    icon: 'lucide:box',
+    color: 'emerald',
+    stars: '200k',
+    language: 'JavaScript',
+    category: '前端',
+    url: 'https://github.com/vuejs/vue'
+  },
+  {
+    name: 'React',
+    description: '用于构建用户界面的 JavaScript 库',
+    icon: 'lucide:atom',
+    color: 'blue',
+    stars: '190k',
+    language: 'JavaScript',
+    category: '前端',
+    url: 'https://github.com/facebook/react'
+  },
+  {
+    name: 'TailwindCSS',
+    description: '功能优先的 CSS 框架',
+    icon: 'lucide:palette',
+    color: 'cyan',
+    stars: '71.2k',
+    language: 'CSS',
+    category: '前端',
+    url: 'https://github.com/tailwindlabs/tailwindcss'
+  },
+  {
+    name: 'Node.js',
+    description: 'JavaScript 运行时环境',
+    icon: 'lucide:server',
+    color: 'green',
+    stars: '98.7k',
+    language: 'C++',
+    category: '后端',
+    url: 'https://github.com/nodejs/node'
+  },
+  {
+    name: 'TypeScript',
+    description: 'JavaScript 的超集',
+    icon: 'lucide:file-code',
+    color: 'blue',
+    stars: '92.4k',
+    language: 'TypeScript',
+    category: '工具库',
+    url: 'https://github.com/microsoft/TypeScript'
+  },
+  {
+    name: 'Astro',
+    description: '现代化的静态站点生成器',
+    icon: 'lucide:rocket',
+    color: 'orange',
+    stars: '34.2k',
+    language: 'TypeScript',
+    category: '前端',
+    url: 'https://github.com/withastro/astro'
+  }
+];
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
+  {projects.map(project => (
+    <a href={project.url} 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       class="bg-white rounded-xl p-4 hover:shadow-lg transition-all duration-300 group border border-gray-100">
+      <div class="flex items-start space-x-4">
+        <div class={`w-12 h-12 rounded-xl bg-${project.color}-50 flex items-center justify-center
+                     group-hover:scale-110 transition-transform duration-300`}>
+          <Icon 
+            name={project.icon} 
+            class={`w-6 h-6 text-${project.color}-500`} 
+          />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors duration-300 truncate">
+            {project.name}
+          </h3>
+          <p class="text-sm text-gray-500 mt-1 line-clamp-2">{project.description}</p>
+          <div class="flex items-center space-x-4 mt-3 text-sm text-gray-600">
+            <div class="flex items-center space-x-1">
+              <Icon name="lucide:star" class="w-4 h-4" />
+              <span>{project.stars}</span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <span class="w-2 h-2 rounded-full" style={`background-color: ${getLanguageColor(project.language)}`}></span>
+              <span>{project.language}</span>
+            </div>
+            <span class="text-gray-400 truncate">{project.category}</span>
+          </div>
+        </div>
+      </div>
+    </a>
+  ))}
+</div>
+
+<style>
+  /* 确保长文本不会破坏布局 */
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style> 

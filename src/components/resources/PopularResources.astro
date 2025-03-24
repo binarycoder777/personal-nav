@@ -1,0 +1,56 @@
+---
+import { Icon } from "astro-icon/components";
+
+const popularResources = [
+  {
+    title: '本周最受欢迎',
+    items: [
+      {
+        name: 'UI 设计系统完全指南',
+        downloads: '1.2k',
+        trend: '+256'
+      },
+      {
+        name: 'JavaScript 性能优化技巧',
+        downloads: '986',
+        trend: '+180'
+      },
+      {
+        name: '移动端适配方案合集',
+        downloads: '756',
+        trend: '+120'
+      }
+    ]
+  }
+];
+---
+
+<div class="mt-12 mb-8">
+  <h2 class="text-xl font-semibold text-gray-900 mb-6">热门推荐</h2>
+  <div class="bg-white rounded-xl border border-gray-100 p-6">
+    {popularResources.map(section => (
+      <div>
+        <h3 class="text-lg font-medium text-gray-900 mb-4">{section.title}</h3>
+        <div class="space-y-4">
+          {section.items.map(item => (
+            <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+              <div class="flex items-center space-x-3">
+                <span class="font-medium text-gray-900">{item.name}</span>
+              </div>
+              <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-1">
+                  <Icon name="lucide:download" class="w-4 h-4 text-gray-400" />
+                  <span class="text-sm text-gray-600">{item.downloads}</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                  <Icon name="lucide:trending-up" class="w-4 h-4 text-green-500" />
+                  <span class="text-sm text-green-500">{item.trend}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div> 

@@ -1,0 +1,43 @@
+---
+import { Icon } from "astro-icon/components";
+
+const trendingProjects = [
+  {
+    name: 'Astro',
+    description: '现代化的静态站点生成器',
+    growth: '+125%',
+    trend: 'up',
+    url: 'https://github.com/withastro/astro'
+  },
+  {
+    name: 'Tauri',
+    description: '构建更小、更快和更安全的桌面应用程序',
+    growth: '+89%',
+    trend: 'up',
+    url: 'https://github.com/tauri-apps/tauri'
+  },
+  // 添加更多项目...
+];
+---
+
+<div class="bg-white rounded-xl p-6 my-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-bold text-gray-800">本周趋势</h2>
+    <a href="#" class="text-purple-600 hover:text-purple-700 text-sm font-medium">查看更多</a>
+  </div>
+  <div class="space-y-4">
+    {trendingProjects.map(project => (
+      <a href={project.url} target="_blank" rel="noopener noreferrer" 
+         class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-all duration-300">
+        <div>
+          <h3 class="font-medium text-gray-900">{project.name}</h3>
+          <p class="text-sm text-gray-500">{project.description}</p>
+        </div>
+        <div class={`flex items-center space-x-2 ${project.trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+          <Icon name="lucide:trending-up" class="w-4 h-4 text-green-500" />
+          <span class="font-medium">{project.growth}</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</div> 
