@@ -1,0 +1,1 @@
+const e={isOpen:!0,listeners:new Set,toggle(){this.isOpen=!this.isOpen,this.notify()},subscribe(s){this.listeners.add(s)},unsubscribe(s){this.listeners.delete(s)},notify(){this.listeners.forEach(s=>s(this.isOpen))}};export{e as s};

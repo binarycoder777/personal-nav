@@ -1,0 +1,1 @@
+import{s as i}from"./sidebarState.DXDCHeUJ.js";const e=document.getElementById("sidebar");if(e){const t=localStorage.getItem("sidebarState")!=="closed";a(t),i.subscribe(s=>{a(s)})}function a(t){e&&(e.style.transform=t?"translateX(0)":"translateX(-100%)")}

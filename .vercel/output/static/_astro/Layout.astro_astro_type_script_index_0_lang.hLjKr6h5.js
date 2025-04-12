@@ -1,0 +1,1 @@
+import{s as i}from"./sidebarState.DXDCHeUJ.js";const e=document.getElementById("main-content");if(e){const t=localStorage.getItem("sidebarState")!=="closed";n(t),i.subscribe(a=>{n(a)})}function n(t){e&&(e.style.marginLeft=t?"5rem":"0")}
